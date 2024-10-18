@@ -26,8 +26,6 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { fetchStates, fetchLgas, fetchWards, uploadPhoto, loginVolunteer, createVolunteer } from "@/lib/utils";
-import { Dice1 } from "lucide-react";
-import { set } from "react-hook-form";
 import { LGA, State, Volunteer, Ward } from "@/lib/types";
 import { Navigate } from "react-router-dom";
 
@@ -50,7 +48,7 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
   const [states, setStates] = useState<State[]>([]);
   const [lgas, setLgas] = useState<LGA[]>([]);
   const [wards, setWards] = useState<Ward[]>([]);
-  const [genders, setGenders] = useState([{ name: 'Male', id: 1 }, { name: 'Female', id: 2 }]);
+  const genders = [{ name: 'Male', id: 1 }, { name: 'Female', id: 2 }];
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

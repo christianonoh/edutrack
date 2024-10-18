@@ -1,13 +1,12 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "./ui/button"
-import { CheckIcon, DownloadIcon, EyeIcon } from "lucide-react"
-import { getFullName, getPhotoUrl, handleDownload, handleMarkAsCollated } from "@/lib/utils"
+import { CheckIcon, DownloadIcon } from "lucide-react"
+import { getFullName, handleDownload, handleMarkAsCollated } from "@/lib/utils"
 import defaultPhoto from "@/assets/default.png"
-import { EyeOpenIcon } from "@radix-ui/react-icons"
 import { PopOver } from "./PopOver"
 import { Badge } from "./ui/badge"
-// Define the structure of survey data
+
 export type Survey = {
   collated: boolean | undefined
   id: number
@@ -17,7 +16,6 @@ export type Survey = {
   date_submitted: string
 }
 
-// Define the table columns for survey data
 export const columns: ColumnDef<Survey>[] = [
   {
     id: 'sn',

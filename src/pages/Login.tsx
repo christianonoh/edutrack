@@ -1,4 +1,3 @@
-import { supabase } from '@/supabaseClient';
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button"
 import {
@@ -11,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Layout from '@/components/Layout';
-import { loginUser, signUpUser } from '@/lib/utils';
+import { loginUser } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 
 export function LoginForm() {
@@ -62,6 +61,9 @@ const navigate = useNavigate();
             </div>
             <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
+          {error && (
+            <div className="text-red-500 text-sm">{error}</div>
+          )}
           <Button type="submit" className="w-full" onClick={handleLogin} >
             Login
           </Button>

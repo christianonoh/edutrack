@@ -1,6 +1,6 @@
 // Home.tsx
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { VolunteerFormData } from '../components/VolunteerFormData';
 import { Survey } from '@/components/SurveyList';
 import { NavBar } from '@/components/NavBar';
@@ -8,7 +8,7 @@ import { SurveyForm } from '@/components/SurveyForm';
 import { fetchSurveys } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Info, RocketIcon } from 'lucide-react';
+import { Info } from 'lucide-react';
 
 const Home = () => {
 

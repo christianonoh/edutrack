@@ -34,7 +34,7 @@ interface FormData {
   title: string;
   file: File | null;
   stateId: number;
-  lgaId: number;
+  lgaId: string | undefined;
   wardId: string | undefined;
   community: string;
 }
@@ -52,7 +52,6 @@ export function SurveyForm({ setSurvey, volunteer, setShowSurveyForm, surveys }:
     community: volunteer.community,
   });
 
-  const [filePreview, setFilePreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -101,9 +100,6 @@ export function SurveyForm({ setSurvey, volunteer, setShowSurveyForm, surveys }:
         ...formData,
         file: renamedFile,
       });
-
-      const previewUrl = URL.createObjectURL(renamedFile);
-      setFilePreview(previewUrl);
     }
   };
 
@@ -249,6 +245,7 @@ export function SurveyForm({ setSurvey, volunteer, setShowSurveyForm, surveys }:
               onChange={handleFileChange}
               required
               />
+              {error && <p className="text-red-500 text-sm">{error}</p>}
             </div>
           </div>
         </CardContent>

@@ -1,4 +1,3 @@
-import { supabase } from '@/supabaseClient';
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button"
 import {

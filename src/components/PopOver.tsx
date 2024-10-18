@@ -1,29 +1,21 @@
-import { CopyIcon } from "@radix-ui/react-icons"
-
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogClose,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { DataTable } from "./DataTable"
 import { columns } from "./columns"
 import { Card } from "./ui/card"
-import { fetchSurveys, getFullName } from "@/lib/utils"
-import { useEffect, useState } from "react"
-
+import { getFullName } from "@/lib/utils"
 
 export interface PopOverProps {
     volunteer: any | null;
 }
-
 
 export const PopOver = ({ volunteer }: PopOverProps) => {
     // const [surveys, setSurveys] = useState<any[]>([]);

@@ -1,7 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { supabase } from "@/supabaseClient";
-import axios from 'axios';
 
 // Merge Tailwind classes with conditional classNames
 export function cn(...inputs: ClassValue[]): string {
@@ -32,7 +31,7 @@ export const fetchLgas = async (stateId: number): Promise<any[]> => {
 };
 
 // Fetch all Wards by LGA ID
-export const fetchWards = async (lgaId: number): Promise<any[]> => {
+export const fetchWards = async (lgaId: number | string): Promise<any[]> => {
   const { data, error } = await supabase
     .from("wards")
     .select("*")

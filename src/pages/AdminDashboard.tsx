@@ -1,10 +1,9 @@
 import * as React from "react"
 import { useState, useEffect } from 'react';
-import { supabase } from '@/supabaseClient'; // Ensure you import your initialized Supabase client
-import { DropdownMenuIcon } from '@radix-ui/react-icons';
+import { supabase } from '@/supabaseClient';
 import { CalendarIcon } from "@radix-ui/react-icons"
-import { addDays, format } from "date-fns"
-import { cn, fetchVolunteers, handleMarkAsCollated } from "@/lib/utils"
+import { format } from "date-fns"
+import { cn, fetchVolunteers } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
 import {
   Popover,
@@ -19,17 +18,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from '@/components/ui/button';
-import { fetchLgas, fetchStates, fetchSurveysAdmin, fetchWards } from '@/lib/utils';
+import { fetchLgas, fetchStates, fetchWards } from '@/lib/utils';
 import { LGA, State, Ward } from '@/lib/types';
 import { FilterIcon } from 'lucide-react';
 import { DataTable } from '@/components/DataTable';
-import { columns, volunteersColumns } from '@/components/columns';
+import { volunteersColumns } from '@/components/columns';
 import { NavBar } from "@/components/NavBar";
 
 const AdminDashboard: React.FC = () => {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [surveys, setSurveys] = useState<any[]>([]);
   const [states, setStates] = useState<State[]>([]);
   const [lgas, setLgas] = useState<LGA[]>([]);
   const [wards, setWards] = useState<Ward[]>([]);

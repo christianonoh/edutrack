@@ -5,7 +5,7 @@ import {
     AvatarImage,
     AvatarFallback
 } from "@/components/ui/avatar";
-import { formatDate, getPhotoUrl, getSurveyFileUrl } from "@/lib/utils";
+import { formatDate, getPhotoUrl } from "@/lib/utils";
 export interface Survey {
     id: number;
     title: string;
@@ -35,14 +35,14 @@ export const Survey = ({ survey }: { survey: Survey }) => {
         fetchPhotoUrl();
     }, [survey.volunteer.photo]);
 
-    const handleDownload = async (url: string) => {
-        const fileUrl = await getSurveyFileUrl(url);
-        if (fileUrl) {
-            window.open(fileUrl, "_blank");
-        } else {
-            console.error("Failed to get the file URL.");
-        }
-    };
+    // const handleDownload = async (url: string) => {
+    //     const fileUrl = await getSurveyFileUrl(url);
+    //     if (fileUrl) {
+    //         window.open(fileUrl, "_blank");
+    //     } else {
+    //         console.error("Failed to get the file URL.");
+    //     }
+    // };
 
     let initials = survey.volunteer.first_name.charAt(0) + survey.volunteer.surname.charAt(0);
     return <><div key={survey.id} className="flex items-center gap-4">
