@@ -40,8 +40,8 @@ export const PopOver = ({ volunteer }: PopOverProps) => {
             Anyone who has this link will be able to view this.
           </DialogDescription> */}
                 </DialogHeader>
-                <Card className="flex items-center w-full">
-                    <div className="grid flex-1 gap-2">
+                <Card className="flex items-center w-full overflow-hidden">
+                    <div className="overflow-x-auto text-sm w-full">
                         <DataTable columns={columns} data={volunteer.surveys} />
                     </div>
                 </Card>

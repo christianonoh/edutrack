@@ -128,7 +128,7 @@ const AdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 w-full">
+    <div className="min-h-screen bg-gray-50 w-full overflow-hidden">
       <NavBar user={session.user.user_metadata} />
       <div className="max-w-7xl mx-auto w-full  p-6">
         {/* Header */}
@@ -202,39 +202,7 @@ const AdminDashboard: React.FC = () => {
 
         {/* Survey Table */}
         <div className="overflow-x-auto">
-          {/* <table className="min-w-full bg-white border border-gray-200">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="py-2 px-4 border-b">Survey ID</th>
-                <th className="py-2 px-4 border-b">State</th>
-                <th className="py-2 px-4 border-b">LGA</th>
-                <th className="py-2 px-4 border-b">Ward</th>
-                <th className="py-2 px-4 border-b">Date</th>
-                <th className="py-2 px-4 border-b">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {surveys.length > 0 ? (
-                surveys.map((survey) => (
-                  <tr key={survey.id} className="hover:bg-gray-50">
-                    <td className="py-2 px-4 border-b">{survey.id}</td>
-                    <td className="py-2 px-4 border-b">{survey.state}</td>
-                    <td className="py-2 px-4 border-b">{survey.lga}</td>
-                    <td className="py-2 px-4 border-b">{survey.ward}</td>
-                    <td className="py-2 px-4 border-b">{survey.date}</td>
-                    <td className="py-2 px-4 border-b">{survey.status}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={6} className="py-2 px-4 text-center">
-                    No surveys found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table> */}
-          <DataTable columns={volunteersColumns} data={volunteers} />
+          <DataTable columns={volunteersColumns} data={volunteers} showVolunteersCount={true} />
         </div>
       </div>
     </div>

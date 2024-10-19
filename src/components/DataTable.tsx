@@ -22,11 +22,13 @@ import React from "react"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  showVolunteersCount?: boolean
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  showVolunteersCount,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -46,20 +48,20 @@ export function DataTable<TData, TValue>({
   return (
     <div className="rounded-md border">
       <div className="flex justify-between px-5">
-        <div className="flex items-center py-4">
+        {showVolunteersCount && (<div className="flex items-center py-4">
           <span className="text-md font-semibold text-zinc-500">Total No of Volunteers: {data.length}</span>
-        </div>
-      {
-        table.getColumn("email") && (<div className="flex items-center py-4 justify-end mr-2">
-        <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-      </div>)}
+        </div>)}
+        {
+          table.getColumn("email") && (<div className="flex items-center py-4 justify-end mr-2">
+            <Input
+              placeholder="Filter emails..."
+              value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+              onChange={(event) =>
+                table.getColumn("email")?.setFilterValue(event.target.value)
+              }
+              className="max-w-sm"
+            />
+          </div>)}
       </div>
       <Table>
         {/* Table header */}
@@ -72,16 +74,16 @@ export function DataTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                   </TableHead>
                 )
               })}
             </TableRow>
           ))}
         </TableHeader>
-        
+
         {/* Table body */}
         <TableBody>
           {table.getRowModel().rows?.length ? (
@@ -103,7 +105,7 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      
+
       {/* Pagination controls */}
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button

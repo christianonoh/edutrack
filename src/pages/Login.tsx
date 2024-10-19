@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -11,14 +11,22 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Layout from '@/components/Layout';
 import { loginUser } from '@/lib/utils';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { AuthContext } from '@/components/AuthContext';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-const navigate = useNavigate();
+  const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
 
+  if (authContext) {
+    const { session } = authContext;
+    if (session) {
+      return <Navigate to="/home" />;
+    }
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +41,7 @@ const navigate = useNavigate();
 
   return (
     <Layout>
-    <Card className="mx-auto max-w-sm">
+    <Card className="mx-auto max-w-sm ">
       <CardHeader>
         <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription>

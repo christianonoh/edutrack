@@ -36,9 +36,9 @@ export const NavBar: React.FC<NavBarProps> = ({ volunteer, setShowSurveyForm, us
         }
     }
     return (
-        <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 max-w-7xl mx-auto">
+        <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-gray-100 px-4 md:px-6 max-w-7xl mx-auto">
             <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center w-full justify-between md:gap-5 md:text-sm lg:gap-6">
-                <div className="text-lg font-semibold md:text-base md:w-full">
+                <div className="text-sm sm:text-lg font-semibold md:text-base md:w-full">
                     <a href="#">
                         <span>SouthEast Education Data Collation</span>
                     </a>
