@@ -165,8 +165,7 @@ export const submitSurvey = async (response: SurveyResponse): Promise<any | null
     .select(`
       *,
       volunteer:user_id (*)
-    `)
-    .single();
+    `);
 
   if (error) {
     console.error("Error submitting survey:", error.message);
@@ -418,15 +417,18 @@ export const fetchSession = async () => {
 };
 
 export const handleDownload = async (survey: any) => {
-  const url = await getSurveyFileUrl(survey.url);
-  if (url) {
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', survey.title);
-    link.setAttribute('target', '_blank');
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+  const { data, error } = await supabase
+    .storage
+    .from('edutrack')
+    .download(survey.url);
+  if (!error) {
+      const url = window.URL.createObjectURL(data);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', survey.title);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
   } else {
     console.error("Error getting survey file URL");
   }

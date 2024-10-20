@@ -43,7 +43,7 @@ const Home = () => {
   }, [volunteer]);
   return (
     <div className='w-full max-w-2xl'>
-      <NavBar volunteer={volunteer} setShowSurveyForm={setShowSurveyForm} />
+      <NavBar volunteer={volunteer} showSurveyForm={showSurveyForm} setShowSurveyForm={setShowSurveyForm} />
 
       <div className="mx-4 md:mx-0">
 
@@ -86,7 +86,7 @@ const Home = () => {
             <VolunteerFormData setVolunteer={setVolunteer} />
           )
         }
-        {volunteer && showSurveyForm && <SurveyForm volunteer={volunteer} setSurvey={setSurveys} setShowSurveyForm={setShowSurveyForm} surveys={surveys} />}
+        {volunteer && showSurveyForm && <SurveyForm volunteer={volunteer} setSurveys={setSurveys} setShowSurveyForm={setShowSurveyForm} setIsLoading={setIsLoading} />}
       </div>
     </div>
   );

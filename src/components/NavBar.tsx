@@ -16,9 +16,10 @@ interface NavBarProps {
     volunteer?: any | null;
     setShowSurveyForm?: (show: boolean) => void | null;
     user?: any | null;
+    showSurveyForm?: boolean;
 }
 
-export const NavBar: React.FC<NavBarProps> = ({ volunteer, setShowSurveyForm, user }) => {
+export const NavBar: React.FC<NavBarProps> = ({ volunteer, setShowSurveyForm, user, showSurveyForm }) => {
     const [profile, setProfile] = useState<any | null>(null);
     useEffect(() => {
         if(user){
@@ -44,7 +45,7 @@ export const NavBar: React.FC<NavBarProps> = ({ volunteer, setShowSurveyForm, us
                     </a>
                 </div>
                 {volunteer && (
-                    <Button onClick={() => setShowSurveyForm && setShowSurveyForm(true)} type="submit" className="">
+                    <Button onClick={() => setShowSurveyForm && setShowSurveyForm(!showSurveyForm)} type="submit" className="">
                         Upload Research Data
                     </Button>
                 )}

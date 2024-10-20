@@ -19,15 +19,16 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { fetchLgas, fetchStates, fetchWards, submitSurvey, uploadSurveyFile } from "@/lib/utils";
+import { fetchLgas, fetchStates, fetchSurveys, fetchWards, submitSurvey, uploadSurveyFile } from "@/lib/utils";
 import { LGA, State, Ward } from "@/lib/types";
 
 
 interface SurveyFormProps {
-  setSurvey: (value: any) => void | null;
+  setSurveys: (value: any) => void | null;
   volunteer: any | null;
   setShowSurveyForm: (value: any) => void | null;
-  surveys: any[] | null;
+  surveys?: any[] | null;
+  setIsLoading: (value: boolean) => void | null;
 }
 
 interface FormData {
@@ -39,7 +40,7 @@ interface FormData {
   community: string;
 }
 
-export function SurveyForm({ setSurvey, volunteer, setShowSurveyForm, surveys }: SurveyFormProps) {
+export function SurveyForm({ setSurveys, volunteer, setShowSurveyForm, setIsLoading }: SurveyFormProps) {
   const [states, setStates] = useState<State[]>([]);
   const [lgas, setLgas] = useState<LGA[]>([]);
   const [wards, setWards] = useState<Ward[]>([]);
@@ -53,6 +54,18 @@ export function SurveyForm({ setSurvey, volunteer, setShowSurveyForm, surveys }:
   });
 
   const [error, setError] = useState<string | null>(null);
+
+  const fetchSurveysAsync = async (volunteerId: number) => {
+    setIsLoading(true);
+    try {
+      const fetchedSurveys = await fetchSurveys(volunteerId);
+      setSurveys(fetchedSurveys);
+    } catch (error) {
+      console.error('Error fetching surveys:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchStates().then((data) => {
@@ -129,13 +142,13 @@ export function SurveyForm({ setSurvey, volunteer, setShowSurveyForm, surveys }:
         stateId: formData.stateId,
         lgaId: formData.lgaId,
         wardId: formData.wardId,
+        community: formData.community,
         volunteerId: volunteer.id,
       });
       if (!survey) throw new Error("Error submitting survey");
       if (survey) {
         setShowSurveyForm(false);
-        window.location.reload();
-        setSurvey({ ...surveys, survey });
+        fetchSurveysAsync(volunteer.id);
       }
     } catch (error) {
       console.error(error);
