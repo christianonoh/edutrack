@@ -22,7 +22,7 @@ import { fetchLgas, fetchStates, fetchWards } from '@/lib/utils';
 import { LGA, State, Ward } from '@/lib/types';
 import { FilterIcon } from 'lucide-react';
 import { DataTable } from '@/components/DataTable';
-import { volunteersColumns } from '@/components/columns';
+import { getVolunteersColumns } from '@/components/columns';
 import { NavBar } from "@/components/NavBar";
 
 const AdminDashboard: React.FC = () => {
@@ -202,7 +202,7 @@ const AdminDashboard: React.FC = () => {
 
         {/* Survey Table */}
         <div className="overflow-x-auto">
-          <DataTable columns={volunteersColumns} data={volunteers} showVolunteersCount={true} />
+          <DataTable columns={getVolunteersColumns} data={volunteers} showVolunteersCount={true} />
         </div>
       </div>
     </div>
