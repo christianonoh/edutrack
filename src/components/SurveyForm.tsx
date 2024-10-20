@@ -223,6 +223,7 @@ export function SurveyForm({ setSurveys, volunteer, setShowSurveyForm, setIsLoad
                 value={formData.wardId?.toString() || ""}
                 onValueChange={(value) => handleSelectChange("ward", value)}
                 disabled={!formData.lgaId || wards.length === 0}
+                required
               >
                 <SelectTrigger id="ward">
                   <SelectValue placeholder="Select ward" />
@@ -245,6 +246,7 @@ export function SurveyForm({ setSurveys, volunteer, setShowSurveyForm, setIsLoad
                 name="community"
                 value={formData.community}
                 onChange={handleInputChange}
+                required
               />
             </div>
 

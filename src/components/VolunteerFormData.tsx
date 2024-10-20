@@ -320,6 +320,7 @@ export function VolunteerFormData({ setVolunteer }: { setVolunteer: (value: any)
                     <Select
                       onValueChange={(value) => handleSelectChange("ward", value)}
                       disabled={!formData.lga || wards.length === 0}
+                      required
                     >
                       <SelectTrigger id="ward">
                         <SelectValue placeholder="Select ward" />
