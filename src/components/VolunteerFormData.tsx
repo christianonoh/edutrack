@@ -157,10 +157,10 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
     <div>
       <Tabs defaultValue="1" className="max-w-2xl md:mt-16 mt-12">
         <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="2">New Volunteer</TabsTrigger>
-          <TabsTrigger value="1">Update Your Record</TabsTrigger>
+        <TabsTrigger value="1">New Volunteer</TabsTrigger>
+          <TabsTrigger value="2">Update Your Record</TabsTrigger>
         </TabsList>
-        <TabsContent value="1">
+        <TabsContent value="2">
           <Card className="w-full max-w-2xl">
             <CardHeader>
               <CardTitle>Volunteer Login</CardTitle>
@@ -186,12 +186,12 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
                 </div>
                 </CardContent>
               <CardFooter>
-                <Button type="submit" className="w-full">Log in</Button>
+                <Button type="submit" className="w-full">Proceed</Button>
               </CardFooter>
             </form>
           </Card>
         </TabsContent>
-        <TabsContent value="2">
+        <TabsContent value="1">
           <Card className="w-full max-w-2xl">
             <CardHeader>
               <CardTitle>Let's get your info so you can submit your research findings</CardTitle>
