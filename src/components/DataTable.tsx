@@ -19,23 +19,28 @@ import { Button } from "./ui/button"
 import { Input } from "@/components/ui/input"
 import React from "react"
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
+interface DataTableProps<TData> {
+  columns: any
   data: TData[]
   showVolunteersCount?: boolean
+  isLoading?: boolean
+  reloadData?: () => void,
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   showVolunteersCount,
-}: DataTableProps<TData, TValue>) {
+  isLoading,
+  reloadData,
+}: DataTableProps<TData>) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
+  const processedColumns = columns(reloadData)
   const table = useReactTable({
     data,
-    columns,
+    columns: processedColumns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
@@ -52,7 +57,7 @@ export function DataTable<TData, TValue>({
           <span className="text-md font-semibold text-zinc-500">Total No of Volunteers: {data.length}</span>
         </div>)}
         {
-          table.getColumn("email") && (<div className="flex items-center py-4 justify-end mr-2">
+          showVolunteersCount && (<div className="flex items-center py-4 justify-end mr-2">
             <Input
               placeholder="Filter emails..."
               value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
@@ -86,23 +91,29 @@ export function DataTable<TData, TValue>({
 
         {/* Table body */}
         <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
+            {isLoading ? (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                <span>Loading...</span>
               </TableCell>
             </TableRow>
-          )}
+            ) : table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <TableCell key={cell.id}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+              </TableRow>
+            ))
+            ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+              No results.
+              </TableCell>
+            </TableRow>
+            )}
         </TableBody>
       </Table>
 
