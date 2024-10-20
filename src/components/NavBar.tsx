@@ -11,7 +11,6 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet";
 import { logOutUser } from "@/lib/utils";
-import { Survey } from "./SurveyList";
 import { DownloadSurveyFiles } from "./SurveyFiles";
 
 interface NavBarProps {
