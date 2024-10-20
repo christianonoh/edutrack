@@ -9,31 +9,35 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { DataTable } from "./DataTable"
-import { columns } from "./columns"
+import { getSurveyColumns } from "./columns"
 import { Card } from "./ui/card"
-import { getFullName } from "@/lib/utils"
+import { fetchVolunteerSurveys, getFullName } from "@/lib/utils"
+import { useState } from "react"
 
 export interface PopOverProps {
     volunteer: any | null;
+    setVolunteer?: (volunteer: any) => void;
 }
 
 export const PopOver = ({ volunteer }: PopOverProps) => {
-    // const [surveys, setSurveys] = useState<any[]>([]);
+    const [surveys, setSurveys] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    // const fetchVolunteerSurveys = async () => {
-    //     const data = await fetchSurveys(volunteer.id);
-    //     setSurveys(data);
-    // }
-    
-    // useEffect(() => {
-    //     fetchVolunteerSurveys();
-    // }, []);
+    const fetchSurveys = async () => {
+        setIsLoading(true);
+        const data = await fetchVolunteerSurveys(volunteer.id);
+        if (data) {
+            setIsLoading(false);
+            setSurveys(data);
+        }
+    }
+
     return (
         <Dialog>
-            <DialogTrigger asChild disabled={volunteer.surveys.length == 0 }>
-                <Button variant="outline">View Uploads</Button>
+            <DialogTrigger asChild disabled={volunteer.surveys[0]['count'] == 0 }>
+                <Button variant="outline" onClick={() => fetchSurveys()}>View Uploads</Button>
             </DialogTrigger>
-            <DialogContent className="max-w-4xl w-full py-12">
+            <DialogContent className="max-w-7xl w-full py-12">
                 <DialogHeader>
                     <DialogTitle>{getFullName(volunteer)} Uploads</DialogTitle>
                     {/* <DialogDescription>
@@ -42,7 +46,7 @@ export const PopOver = ({ volunteer }: PopOverProps) => {
                 </DialogHeader>
                 <Card className="flex items-center w-full overflow-hidden">
                     <div className="overflow-x-auto text-sm w-full">
-                        <DataTable columns={columns} data={volunteer.surveys} />
+                        <DataTable columns={getSurveyColumns} data={surveys} isLoading={isLoading} reloadData={fetchSurveys} />
                     </div>
                 </Card>
 
