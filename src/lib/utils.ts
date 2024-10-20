@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { supabase } from "@/supabaseClient";
+import Swal from 'sweetalert2';
 
 // Merge Tailwind classes with conditional classNames
 export function cn(...inputs: ClassValue[]): string {
@@ -178,7 +179,7 @@ export const submitSurvey = async (response: SurveyResponse): Promise<any | null
 export const fetchSurveys = async (volunteerId: number): Promise<any[]> => {
   const { data, error } = await supabase
     .from("surveys")
-    .select(`*,volunteer:user_id (*)`)
+    .select(`community,title,created_at,volunteer:user_id (*)`)
     .eq("user_id", volunteerId)
     .order('created_at', { ascending: false });
   if (error) {
@@ -455,3 +456,38 @@ export const getFullName = (volunteer: any): string => {
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   return `${capitalize(volunteer.first_name)} ${capitalize(volunteer.surname)}`;
 }
+
+export const handleDelete = async (survey: any) => {
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!',
+    customClass: {
+      popup: 'z-[100] swal-zindex-fix'  // Add custom class for z-index fix
+    }
+  });
+
+  if (result.isConfirmed) {
+    const { data, error } = await supabase
+      .from('surveys')
+      .delete()
+      .eq('id', survey.id)
+      .select();
+
+    if (error) {
+      console.error("Error deleting survey:", error.message);
+    } else {
+      Swal.fire(
+        'Deleted!',
+        'Your survey has been deleted.',
+        'success'
+      );
+    }
+
+    return { data, error };
+  }
+};

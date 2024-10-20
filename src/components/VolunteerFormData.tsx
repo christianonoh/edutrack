@@ -28,9 +28,10 @@ import {
 import { fetchStates, fetchLgas, fetchWards, uploadPhoto, loginVolunteer, createVolunteer } from "@/lib/utils";
 import { LGA, State, Volunteer, Ward } from "@/lib/types";
 import { Navigate } from "react-router-dom";
+import { DownloadSurveyFiles } from "./SurveyFiles";
 
 
-export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) => void}) {
+export function VolunteerFormData({ setVolunteer }: { setVolunteer: (value: any) => void }) {
 
   const [formData, setFormData] = useState<Volunteer>({
     firstName: "",
@@ -129,11 +130,16 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
     e.preventDefault();
 
     try {
+      const existingVolunteer = await loginVolunteer(formData.email);
+      if (existingVolunteer) {
+        setError("Email already exists. Please use a different email or update your record.");
+        return;
+      }
       let photoUrl = null;
       if (formData.photo) {
-          photoUrl = await uploadPhoto(formData.photo);
-          if (!photoUrl) throw new Error("Error uploading photo");
-        }
+        photoUrl = await uploadPhoto(formData.photo);
+        if (!photoUrl) throw new Error("Error uploading photo");
+      }
 
       const volunteer = await createVolunteer({
         firstName: formData.firstName,
@@ -155,10 +161,11 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
 
   return (
     <div>
-      <Tabs defaultValue="1" className="max-w-2xl md:mt-16 mt-12">
+      <DownloadSurveyFiles />
+      <Tabs defaultValue="1" className="max-w-2xl md:mt-6 mt-4">
         <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="1">New Volunteer</TabsTrigger>
-          <TabsTrigger value="2">Update Your Record</TabsTrigger>
+          <TabsTrigger value="1" onClick={() => setError('')}>New Volunteer</TabsTrigger>
+          <TabsTrigger value="2" onClick={() => setError('')}>Update Your Record</TabsTrigger>
         </TabsList>
         <TabsContent value="2">
           <Card className="w-full max-w-2xl">
@@ -166,25 +173,25 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
               <CardTitle>Volunteer Login</CardTitle>
             </CardHeader>
             <form onSubmit={handleLogin}>
-                <CardContent>
+              <CardContent>
                 <div className="space-y-4">
                   <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="Email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                  />
-                  {error && (
-                    <span className="text-red-500 text-sm">{error}</span>
-                  )}
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="Email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                    />
+                    {error && (
+                      <span className="text-red-500 text-sm">{error}</span>
+                    )}
                   </div>
                 </div>
-                </CardContent>
+              </CardContent>
               <CardFooter>
                 <Button type="submit" className="w-full">Proceed</Button>
               </CardFooter>
@@ -201,7 +208,7 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
                 <div className="space-y-4">
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="firstName">First Name
-                    <span className="text-red-500 font-semibold">&nbsp;*</span>
+                      <span className="text-red-500 font-semibold">&nbsp;*</span>
                     </Label>
                     <Input
                       id="firstName"
@@ -215,7 +222,7 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
 
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="surname">Surname
-                    <span className="text-red-500 font-semibold">&nbsp;*</span>
+                      <span className="text-red-500 font-semibold">&nbsp;*</span>
                     </Label>
                     <Input
                       id="surname"
@@ -229,7 +236,7 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
 
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="email">Email
-                    <span className="text-red-500 font-semibold">&nbsp;*</span>
+                      <span className="text-red-500 font-semibold">&nbsp;*</span>
                     </Label>
                     <Input
                       id="email"
@@ -244,7 +251,7 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
 
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="gender">Gender
-                    <span className="text-red-500 font-semibold">&nbsp;*</span>
+                      <span className="text-red-500 font-semibold">&nbsp;*</span>
                     </Label>
                     <Select
                       onValueChange={(value) => handleSelectChange("gender", value)}
@@ -266,7 +273,7 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="state">State
                       <span className="text-red-500 font-semibold">&nbsp;*</span>
-                      </Label>
+                    </Label>
                     <Select
                       onValueChange={(value) => handleSelectChange("state", value)}
                       required
@@ -285,7 +292,7 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
                   </div>
 
                   <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="lga">LGA 
+                    <Label htmlFor="lga">LGA
                       <span className="text-red-500 font-semibold">&nbsp;*</span>
                     </Label>
                     <Select
@@ -308,7 +315,7 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
 
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="ward">Ward
-                    <span className="text-red-500 font-semibold">&nbsp;*</span>
+                      <span className="text-red-500 font-semibold">&nbsp;*</span>
                     </Label>
                     <Select
                       onValueChange={(value) => handleSelectChange("ward", value)}
@@ -329,7 +336,7 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
 
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="community">Community
-                    <span className="text-red-500 font-semibold">&nbsp;*</span>
+                      <span className="text-red-500 font-semibold">&nbsp;*</span>
                     </Label>
                     <Input
                       id="community"
@@ -343,7 +350,7 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
                   {/* Photo */}
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="photo">Your Profile Picture
-                    <span className="text-red-500 font-semibold">&nbsp;*</span>
+                      <span className="text-red-500 font-semibold">&nbsp;*</span>
                     </Label>
                     <Input
                       id="photo"
@@ -360,6 +367,9 @@ export function VolunteerFormData({setVolunteer}: {setVolunteer: (value: any) =>
                       />
                     )}
                   </div>
+                  {error && (
+                    <span className="text-red-500 text-sm">{error}</span>
+                  )}
                 </div>
               </CardContent>
               <CardFooter>

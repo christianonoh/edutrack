@@ -1,0 +1,7 @@
+.swal-zindex-fix {
+    z-index: 10050 !important;
+  }
+
+.swal2-container {
+    @apply z-[100] !important;
+}

@@ -1,8 +1,8 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "./ui/button"
-import { CheckIcon, DownloadIcon } from "lucide-react"
-import { getFullName, handleDownload, handleMarkAsCollated } from "@/lib/utils"
+import { CheckIcon, DeleteIcon, DownloadIcon } from "lucide-react"
+import { getFullName, handleDelete, handleDownload, handleMarkAsCollated } from "@/lib/utils"
 import defaultPhoto from "@/assets/default.png"
 import { PopOver } from "./PopOver"
 import { Badge } from "./ui/badge"
@@ -78,16 +78,25 @@ export const columns: ColumnDef<Survey>[] = [
           className="text-blue-500 hover:text-blue-700"
           title="Download"
         >
-          <DownloadIcon size={20} />
+          <DownloadIcon size={16} />
         </Button>
         <Button
-        disabled={row.original.collated}
-        title="Mark as Collated"
+          disabled={row.original.collated}
+          title="Mark as Collated"
           variant="outline"
           onClick={() => handleMarkAsCollated(row.original)}
           className="text-green-500 hover:text-green-700"
         >
-          <CheckIcon size={20} />
+          <CheckIcon size={16} />
+        </Button>
+        <Button
+          disabled={row.original.collated}
+          title="Delete survey"
+          variant="outline"
+          onClick={() => handleDelete(row.original)}
+          className="text-red-500 hover:text-red-700"
+        >
+          <DeleteIcon size={16} />
         </Button>
       </div>
     ),
@@ -103,46 +112,46 @@ export const volunteersColumns: ColumnDef<any>[] = [
   {
     accessorKey: "photo",
     header: "Profile Photo",
-      cell: ({row}) => {
-        return <img src={row.original.photoUrl || defaultPhoto} alt="Profile" className="w-10 h-10 rounded-full" />;
-      },
+    cell: ({ row }) => {
+      return <img src={row.original.photoUrl || defaultPhoto} alt="Profile" className="w-10 h-10 rounded-full" />;
     },
-    {
+  },
+  {
     accessorKey: "surname",
     header: "Full Name",
     cell: ({ row }) => {
       return getFullName(row.original);
     },
-    },
-    {
+  },
+  {
     accessorKey: "email",
     header: "Email",
-    },
-    {
+  },
+  {
     accessorKey: "state.name",
     header: "State",
-    },
-    {
+  },
+  {
     accessorKey: "lga.name",
     header: "LGA",
-    },
-    {
+  },
+  {
     accessorKey: "ward.name",
     header: "Ward",
-    },
-    {
+  },
+  {
     accessorKey: "collations",
     header: "Collations",
     cell: ({ row }) => {
       return row.original.surveys.length;
     }
-    },
-    {
+  },
+  {
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => (
       <>
-        <PopOver volunteer={row.original}/>
+        <PopOver volunteer={row.original} />
       </>
     ),
   }
