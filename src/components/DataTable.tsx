@@ -27,7 +27,7 @@ interface DataTableProps<TData> {
   reloadData?: () => void,
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData>({
   columns,
   data,
   showVolunteersCount,
