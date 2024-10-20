@@ -2,7 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "./ui/button"
 import { CheckIcon, DeleteIcon, DownloadIcon } from "lucide-react"
-import { getFullName, handleDelete, handleDownload, handleMarkAsCollated } from "@/lib/utils"
+import { getFullName, deleteSurvey, handleDownload, handleMarkAsCollated } from "@/lib/utils"
 import defaultPhoto from "@/assets/default.png"
 import { PopOver } from "./PopOver"
 import { Badge } from "./ui/badge"
@@ -16,7 +16,7 @@ export type Survey = {
   date_submitted: string
 }
 
-export const columns: ColumnDef<Survey>[] = [
+export const getSurveyColumns = (reloadData: () => void): ColumnDef<Survey>[] => [
   {
     id: 'sn',
     header: 'S/N',
@@ -25,6 +25,11 @@ export const columns: ColumnDef<Survey>[] = [
   {
     accessorKey: "title",
     header: "Title",
+    cell: ({ row }) => (
+      <div className="max-w-sm">
+        {row.getValue("title")}
+      </div>
+    ),
   },
   {
     accessorKey: "state.name",
@@ -84,7 +89,7 @@ export const columns: ColumnDef<Survey>[] = [
           disabled={row.original.collated}
           title="Mark as Collated"
           variant="outline"
-          onClick={() => handleMarkAsCollated(row.original)}
+          onClick={() => handleMarkAsCollated(row.original, reloadData)}
           className="text-green-500 hover:text-green-700"
         >
           <CheckIcon size={16} />
@@ -93,7 +98,7 @@ export const columns: ColumnDef<Survey>[] = [
           disabled={row.original.collated}
           title="Delete survey"
           variant="outline"
-          onClick={() => handleDelete(row.original)}
+          onClick={() => deleteSurvey(row.original, reloadData)}
           className="text-red-500 hover:text-red-700"
         >
           <DeleteIcon size={16} />
@@ -103,7 +108,7 @@ export const columns: ColumnDef<Survey>[] = [
   }
 ]
 
-export const volunteersColumns: ColumnDef<any>[] = [
+export const getVolunteersColumns = (): ColumnDef<any>[] => [
   {
     id: 'sn',
     header: 'S/N',
@@ -124,6 +129,7 @@ export const volunteersColumns: ColumnDef<any>[] = [
     },
   },
   {
+    id: 'email',
     accessorKey: "email",
     header: "Email",
   },
@@ -143,7 +149,7 @@ export const volunteersColumns: ColumnDef<any>[] = [
     accessorKey: "collations",
     header: "Collations",
     cell: ({ row }) => {
-      return row.original.surveys.length;
+      return row.original.surveys[0]['count'];
     }
   },
   {
