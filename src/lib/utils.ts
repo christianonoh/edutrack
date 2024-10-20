@@ -189,6 +189,25 @@ export const fetchSurveys = async (volunteerId: number): Promise<any[]> => {
   return data || [];
 };
 
+export const fetchVolunteerSurveys = async (volunteerId: number): Promise<any[]> => {
+  const { data, error } = await supabase
+    .from("surveys")
+    .select(`
+      *,
+      volunteer:user_id (*),
+      state:state_id (*),
+      lga:lga_id (*),
+      ward:ward_id (*)
+    `)
+    .eq("user_id", volunteerId)
+    .order('created_at', { ascending: false });
+  if (error) {
+    console.error("Error fetching surveys:", error.message);
+    return [];
+  }
+  return data || [];
+};
+
 // Format a date string into a human-readable format
 export const formatDate = (dateString: string, format: 'short' | 'long' = 'short'): string => {
   const options: Intl.DateTimeFormatOptions = format === 'long' ? {
@@ -315,17 +334,7 @@ export const fetchVolunteers = async (filters: VolunteerFilters = {}): Promise<a
     state:state_id (*),
     lga:lga_id (*),
     ward:ward_id (*),
-    surveys (
-      id,
-      title,
-      created_at,
-      url,
-      community,
-      collated,
-      state:state_id (*),
-      lga:lga_id (*),
-      ward:ward_id (*)
-    )
+    surveys(count)
   `, { count: 'exact' });
 
 
@@ -435,14 +444,18 @@ export const handleDownload = async (survey: any) => {
   }
 };
 
-export const handleMarkAsCollated = async (survey: any) => {
-const { data, error } = await supabase
+export const handleMarkAsCollated = async (survey: any, reloadData?: () => void) => {
+const { error } = await supabase
     .from('surveys')
     .update({ collated: true })
     .eq('id', survey.id)
     .select()
 
-  return { data, error };
+    if(error){
+      alert("An error occurred while marking the survey as collated");
+    } else {
+      reloadData && reloadData();
+    }
 };
 
 export const logOutUser = async (): Promise<void> => {
@@ -457,37 +470,20 @@ export const getFullName = (volunteer: any): string => {
   return `${capitalize(volunteer.first_name)} ${capitalize(volunteer.surname)}`;
 }
 
-export const handleDelete = async (survey: any) => {
-  const result = await Swal.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!',
-    customClass: {
-      popup: 'z-[100] swal-zindex-fix'  // Add custom class for z-index fix
-    }
-  });
+export const deleteSurvey = async (survey: any, reloadData?: () => void) => {
+  const confirmed = window.confirm("Are you sure? You won't be able to revert this!");
 
-  if (result.isConfirmed) {
-    const { data, error } = await supabase
+  if (confirmed) {
+    const { error } = await supabase
       .from('surveys')
       .delete()
       .eq('id', survey.id)
       .select();
 
-    if (error) {
-      console.error("Error deleting survey:", error.message);
+    if(error){
+      alert("An error occurred while deleting the survey");
     } else {
-      Swal.fire(
-        'Deleted!',
-        'Your survey has been deleted.',
-        'success'
-      );
+      reloadData && reloadData();
     }
-
-    return { data, error };
   }
 };
