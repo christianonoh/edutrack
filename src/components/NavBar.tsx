@@ -54,7 +54,7 @@ export const NavBar: React.FC<NavBarProps> = ({ volunteer, setShowSurveyForm, us
             <Sheet>
                 <div className="flex w-full justify-between md:hidden">
                     <SheetHeader>
-                        <SheetTitle>SouthEast Education Data Collation</SheetTitle>
+                        <SheetTitle>SEDC</SheetTitle>
                     </SheetHeader>
                     <div className="flex gap-2">
                         {volunteer && (
