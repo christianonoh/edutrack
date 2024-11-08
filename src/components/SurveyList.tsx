@@ -45,19 +45,21 @@ export const Survey = ({ survey }: { survey: Survey }) => {
     // };
 
     let initials = survey.volunteer.first_name.charAt(0) + survey.volunteer.surname.charAt(0);
-    return <><div key={survey.id} className="flex items-center gap-4">
-        <Avatar className="hidden h-9 w-9 sm:flex">
-            <AvatarImage src={photoUrl || ""} alt="Avatar" />
-            <AvatarFallback>{initials}</AvatarFallback>
-            {/* <Button onClick={() => handleDownload(survey.url)}>Download</Button> */}
-        </Avatar>
-        <div className="grid gap-1">
-            <p className="text-sm font-medium leading-none">{survey.title}</p>
-            <p className="text-sm text-muted-foreground">{survey.volunteer.first_name + ' ' + survey.volunteer.surname}</p>
-        </div>
-        <div className="ml-auto font-medium">{formatDate(survey.created_at)}</div></div>
-        <Separator className="my-0.5" />
-    </>;
+    return (
+        <div key={survey.id}>
+            <div className="flex items-center gap-4">
+                <Avatar className="hidden h-9 w-9 sm:flex">
+                    <AvatarImage src={photoUrl || ""} alt="Avatar" />
+                    <AvatarFallback>{initials}</AvatarFallback>
+                    {/* <Button onClick={() => handleDownload(survey.url)}>Download</Button> */}
+                </Avatar>
+                <div className="grid gap-1">
+                    <p className="text-sm font-medium leading-none">{survey.title}</p>
+                    <p className="text-sm text-muted-foreground">{survey.volunteer.first_name + ' ' + survey.volunteer.surname}</p>
+                </div>
+                <div className="ml-auto font-medium">{formatDate(survey.created_at)}</div></div>
+            <Separator className="my-0.5" />
+        </div>);
 }
 
 
