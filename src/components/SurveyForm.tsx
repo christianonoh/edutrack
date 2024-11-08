@@ -35,8 +35,8 @@ interface FormData {
   title: string;
   file: File | null;
   stateId: number;
-  lgaId: string | undefined;
-  wardId: string | undefined;
+  lgaId: any;
+  wardId: any;
   community: string;
 }
 
@@ -80,18 +80,37 @@ export function SurveyForm({ setSurveys, volunteer, setShowSurveyForm, setIsLoad
   useEffect(() => {
     if (formData.stateId) {
       fetchLgas(formData.stateId).then(setLgas);
+      setWards([]);
+      setFormData({ 
+        ...formData, 
+        lgaId: '', 
+        wardId: '',
+        community: '' 
+      });
     } else {
+      setFormData({ 
+        ...formData, 
+        lgaId: '', 
+        wardId: '',
+        community: '' 
+      });
       setLgas([]);
-      setFormData({ ...formData, lgaId: undefined, wardId: undefined });
+      setWards([]);
     }
   }, [formData.stateId]);
 
   useEffect(() => {
+   
     if (formData.lgaId) {
       fetchWards(formData.lgaId).then(setWards);
+      setFormData({ 
+        ...formData,
+        wardId: '',
+        community: '' 
+      });
     } else {
       setWards([]);
-      setFormData({ ...formData, wardId: undefined });
+      setFormData({ ...formData, wardId: null });
     }
   }, [formData.lgaId]);
 
@@ -128,7 +147,6 @@ export function SurveyForm({ setSurveys, volunteer, setShowSurveyForm, setIsLoad
     setError(null);
 
     try {
-      // Assuming there's an API call for submitting the survey
       if (!formData.file) {
         setError("Please select a file to upload");
         return;
@@ -199,13 +217,15 @@ export function SurveyForm({ setSurveys, volunteer, setShowSurveyForm, setIsLoad
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="lga">LGA</Label>
               <Select
-                onValueChange={(value) => handleSelectChange("lga", value)}
+                onValueChange={(value) => handleSelectChange("lgaId", value)}
                 disabled={!formData.stateId}
                 value={formData.lgaId?.toString() || ""}
                 required
               >
                 <SelectTrigger id="lga">
-                  <SelectValue placeholder="Select LGA" />
+                <SelectValue>
+                  {formData.lgaId ? lgas.find(lga => lga.id.toString() === formData.lgaId.toString())?.name : "Select Local Government Area"}
+                </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {lgas.map((lga) => (
@@ -221,7 +241,7 @@ export function SurveyForm({ setSurveys, volunteer, setShowSurveyForm, setIsLoad
               <Label htmlFor="ward">Ward</Label>
               <Select
                 value={formData.wardId?.toString() || ""}
-                onValueChange={(value) => handleSelectChange("ward", value)}
+                onValueChange={(value) => handleSelectChange("wardId", value)}
                 disabled={!formData.lgaId || wards.length === 0}
                 required
               >
